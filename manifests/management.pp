@@ -6,6 +6,7 @@ class rabbitmq::management {
   if $delete_guest_user {
     rabbitmq_user{ 'guest':
       ensure   => absent,
+      provider => 'rabbitmqctl',
     }
   }
 
