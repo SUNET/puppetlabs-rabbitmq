@@ -20,6 +20,9 @@ class rabbitmq::repo::apt(
     default => 'present',
   }
 
+  # The mere presence of this apt::source fails with outgoing firewalls
+  if $rabbitmq::package_source {
+
   apt::source { 'rabbitmq':
     ensure      => $ensure_source,
     location    => $location,
@@ -38,4 +41,6 @@ class rabbitmq::repo::apt(
       priority => $pin,
     }
   }
+
+  }   # end if $rabbitmq::package_source
 }
