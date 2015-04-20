@@ -14,20 +14,22 @@ class rabbitmq::repo::apt(
 
   Class['rabbitmq::repo::apt'] -> Package<| title == 'rabbitmq-server' |>
 
-  apt::source { 'rabbitmq':
-    location    => $location,
-    release     => $release,
-    repos       => $repos,
-    include_src => $include_src,
-    key         => $key,
-    key_source  => $key_source,
-  }
+  if $rabbitmq::package_source {
+    apt::source { 'rabbitmq':
+      location    => $location,
+      release     => $release,
+      repos       => $repos,
+      include_src => $include_src,
+      key         => $key,
+      key_source  => $key_source,
+    }
 
-  if $pin {
-    validate_re($pin, '\d\d\d')
-    apt::pin { 'rabbitmq':
-      packages => 'rabbitmq-server',
-      priority => $pin,
+    if $pin {
+      validate_re($pin, '\d\d\d')
+      apt::pin { 'rabbitmq':
+        packages => 'rabbitmq-server',
+        priority => $pin,
+      }
     }
   }
 }
