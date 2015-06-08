@@ -252,10 +252,11 @@ describe 'rabbitmq' do
     let(:facts) {{ :osfamily => 'RedHat', :operatingsystemmajrelease => '7' }}
 
     it { should contain_file('/etc/systemd/system/rabbitmq-server.service.d').with(
-      'ensure' => 'directory',
-      'owner'  => '0',
-      'group'  => '0',
-      'mode'   => '0755'
+      'ensure'                  => 'directory',
+      'owner'                   => '0',
+      'group'                   => '0',
+      'mode'                    => '0755',
+      'selinux_ignore_defaults' => true
     ) }
 
     it { should contain_exec('rabbitmq-systemd-reload').with(
@@ -922,14 +923,14 @@ rabbitmq hard nofile 1234
         let(:params) {{ :tcp_keepalive => true }}
         it 'should set tcp_listen_options keepalive true' do
           should contain_file('rabbitmq.config') \
-            .with_content(/\{tcp_listen_options, \[\{keepalive, true\}\]\},/)
+            .with_content(/\{keepalive,     true\}/)
         end
       end
 
       describe 'tcp_keepalive disabled (default)' do
         it 'should not set tcp_listen_options' do
           should contain_file('rabbitmq.config') \
-            .without_content(/\{tcp_listen_options, \[\{keepalive, true\}\]\},/)
+            .without_content(/\{keepalive,     true\}/)
         end
       end
 
@@ -1056,7 +1057,7 @@ rabbitmq hard nofile 1234
           'release'     => 'testing',
           'repos'       => 'main',
           'include_src' => false,
-          'key'         => 'F7B8CEA6056E8E56'
+          'key'         => 'F78372A06FF50C80464FC1B4F7B8CEA6056E8E56'
         ) }
       end
     end
@@ -1070,7 +1071,7 @@ rabbitmq hard nofile 1234
           'release'     => 'testing',
           'repos'       => 'main',
           'include_src' => false,
-          'key'         => 'F7B8CEA6056E8E56'
+          'key'         => 'F78372A06FF50C80464FC1B4F7B8CEA6056E8E56'
         ) }
 
         it { should contain_apt__pin('rabbitmq').with(
