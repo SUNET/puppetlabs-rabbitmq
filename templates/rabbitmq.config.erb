@@ -67,6 +67,7 @@
 <%- if @admin_enable -%>,
   {rabbitmq_management, [
     {listener, [
+      {ip, "::"},
 <%- if @ssl -%>
       {port, <%= @ssl_management_port %>},
       {ssl, true},
